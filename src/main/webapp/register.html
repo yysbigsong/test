@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>注册界面</title>
+
+        <!-- CSS -->
+<!--         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"> -->
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/form-elements.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+<!--            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+
+        <!-- Top content -->
+        <div class="top-content">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1>XHY课堂注册界面</h1>
+                            <div class="description">
+                            	<p>
+	                            	带给你课堂的全新体验
+                            	</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        	<div class="form-top">
+                        		<div class="form-top-left">
+                        			<h3>注册</h3>
+                            		<p>请填写相关注册信息</p>
+                        		</div>
+                        		<div class="form-top-right">
+                        			<i class="fa fa-key"></i>
+                        		</div>
+                            </div>
+                            <div class="form-bottom">
+			                    <form role="form" action="/confirm?name=register" method="post" class="login-form" onsubmit='return check()' >
+			                    	<div class="form-group">
+			                    		<label class="sr-only" >Username</label>
+			                        	<p id="username">请输入用户名</p><input type="text" id="uname" name="username" placeholder=""  class="form-username form-control"  onblur="asyncPostRequest(this)">
+			                        </div>
+			                        <div class="form-group">
+			                        	<label class="sr-only" >Password</label>
+			                        	<p id="password">请输入密码</p><input type="password" id="pwd" value="" class="form-password form-control" >
+			                        </div>
+									<div class="form-group">
+			                        	<label class="sr-only" >Password</label>
+			                        	<p id="registerpassword">请确认密码</p><input type="password" id="regpwd"  value="" class="form-password form-control">
+			                        </div>
+									<input type='hidden' name='password' id='md5_pwd' value=''/>
+			                        <button type="submit" class="btn"  onclick="getParameter()">注册</button>
+			                    </form>
+		                    </div>
+						</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 social-login">
+                        	<h3><a href="index.html">返回登录界面</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+
+
+        <!-- Javascript -->
+        <script src="assets/js/jquery-1.11.1.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/jquery.backstretch.min.js"></script>
+        <script src="assets/js/scripts.js"></script>
+		<script type="text/ecmascript" src="md5.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+	<script>
+		function check(){
+            var username=document.getElementById('uname').value;
+            asyncPostRequest(username);
+			if(getParameter()==true){
+			    return true;
+			} else{
+				return false;
+			}
+		}
+		function getParameter(async){
+				var username=document.getElementById('uname').value;
+                var pwd=document.getElementById("pwd").value;
+				var regpwd=document.getElementById("regpwd").value;
+				var md5_pwd=document.getElementById("md5_pwd");
+				if(username==null||username==""){
+					document.getElementById("username").style.color="red";
+					return false;
+				}else if (asyncPostRequest(username)==false){
+                    return false;
+                }
+				else if(pwd==null||pwd==""){
+					document.getElementById('password').style.color="red";
+					return false;
+				}else if(regpwd==null||regpwd==""){
+					document.getElementById('registerpassword').style.color="red";
+					return false;
+				}else if(pwd!=regpwd){
+					document.getElementById('password').innerHTML='请重新输入，两次密码输入不同';
+					document.getElementById('password').style.color="red";
+					this.focus();
+					return false;
+				}else{
+					md5_pwd.value= hex_md5(pwd);
+					return true;
+				}
+			}
+        function asyncPostRequest(username){
+            var uname=document.getElementById('uname').value;
+            username = uname;
+            var check=true;
+            var httpRequest=new XMLHttpRequest();
+            httpRequest.open('POST',"http://localhost:8080/checkUsername",false);
+            httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+            httpRequest.send("username="+username);
+            var responseText=httpRequest.responseText;
+            var a=JSON.parse(responseText);
+            var b=a.exists;
+            if (uname==""||uname==null) {
+                document.getElementById("username").style.color="red"
+                check=false;
+            }else if(b==="true") {
+                document.getElementById('username').innerHTML = '用户名已被注册';
+                document.getElementById('username').style.color = "red";
+                document.getElementById('uname').value = "";
+                check = false;
+            }else{
+                document.getElementById('username').innerHTML = '用户名可以使用';
+            }
+            /*httpRequest.onreadystatechange=function(){
+                if(httpRequest.readyState==4&&httpRequest.status==200){
+                    var responseText=httpRequest.responseText;
+                    var a=JSON.parse(responseText);
+                    var b=a.exists;
+                    if(b==="true") {
+                        document.getElementById('username').innerHTML = '用户名已被注册';
+                        document.getElementById('username').style.color = "red";
+                        document.getElementById('uname').value = "";
+                        check=false;
+                    }
+                    /!*console.log(httpRequest.getAllResponseHeaders());*!/
+                }
+            }*/
+            return check;
+        }
+        function bool() {
+            var username=document.getElementById('uname').value;
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    resolve(username);
+                }, 10);
+            });
+        }
+        /*window.onload=function () {
+            var username=document.getElementById('uname');
+            username.addEventListener('change',asyncPostRequest(username.value),true);
+        }*/
+	</script>
+    </body>
+
+</html>
