@@ -60,7 +60,7 @@
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="/test/login?name=login" method="post" class="login-form" onsubmit="return check()">
+			                    <form role="form" id="form" action="/test/login?name=login" method="post" class="login-form" onsubmit="return check()">
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="username">Username</label>
 			                        	<input type="text" name="username" placeholder="用户名..." class="form-username form-control" id="username">
@@ -93,6 +93,9 @@
         <script src="assets/js/jquery.backstretch.min.js"></script>
         <script src="assets/js/scripts.js"></script>
         <script type="text/ecmascript" src="md5.js"></script>
+<!--
+        <script type="text/javascript" src="jquery.min.js"></script>
+-->
         <script>
 		function check(){
 			if(getParameter()==true){
@@ -105,7 +108,7 @@
 			var pwd=document.getElementById("password").value;
 			var md5_pwd=document.getElementById("md5_pwd");
 			if(username==null||username==""){
-				document.getElementById("username").setAttribute.value="用户名不能为空!";
+				document.getElementById("ussername").setAttribute.value="用户名不能为空!";
 				return false;
 			}else if(pwd==null||pwd==""){
 				document.getElementById('password').setAttribute.placeholder="密码不能为空!";
@@ -115,6 +118,12 @@
 				return true;
 			}
 		}
+        /**
+         * 校验文本是否为空
+         * tips：提示信息
+         * 使用方法：$("#id").validate("提示文本");
+         * @itmyhome
+         */
 		</script>
         <!--[if lt IE 10]>
             <script src="assets/js/placeholder.js"></script>
